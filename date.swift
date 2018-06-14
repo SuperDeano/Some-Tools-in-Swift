@@ -7,14 +7,14 @@
 
 import Foundation
 
-class Date{
+public class Date{
     
     //The variables
     var day, month, year : Int?
     var monthInLetter : String?
     
    //Constructor with all three variables
-    init(day: Int, month: Int, year: Int){
+   public init(day: Int, month: Int, year: Int){
  
     //Calls the function to check if the date is valid and then assigns the date
     setsDate(theDay : day, theMonth : month, theYear : year)
@@ -24,7 +24,7 @@ class Date{
     }
     
     //Constructor with not variables
-    init() {
+   public init() {
         day = 1
         month = 1
         year = 2018
@@ -33,35 +33,36 @@ class Date{
     }
     
     //Function which makes sure that the date is correct
-    func setsDate(theDay day: Int,theMonth month: Int,theYear year: Int){
+   public func setsDate(theDay day: Int,theMonth month: Int,theYear year: Int){
         
-        var isTheDateValid : Bool = false
+        var isTheDateValid : Bool = true
         
         //makes sure that the date cannot have a month and day bigger than 12 and 31 respectively or smaller than 1
         if (day < 1 || day > 31 || month < 1 || month > 12){
-            isTheDateValid = true}
+            isTheDateValid = false}
        
         /*Since we are not dealing with leap years, February will not have more than 28 days
         Therefore if the month is February and there's more than 28 days, the date is invalid*/
         else if (month == 2 && day > 28){
-            isTheDateValid = true}
+            isTheDateValid = false}
         
         /*Some months have 30 days, if such month is entered with 31 days, like for november, then the date is invalid*/
         else if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30){
-            isTheDateValid = true}
-        else{
-            //The date is not valid
-            print("Invalid Date!")
-            print ( "Default Date Set")
-            self.day = 1
-            self.month = 1
-            self.year = 2018
-        }
+            isTheDateValid = false}
+        
         if (!isTheDateValid){
         //If the date is valid then the data members received the data
         self.day = day
         self.month = month
         self.year = year}
+        else{
+            //The date is not valid
+            print("Invalid Date!")
+            print ("Default Date Set")
+            self.day = 1
+            self.month = 1
+            self.year = 2018
+        }
     }
 
     //Looks what month it is then associates the right name and stores the name so that it can be quickly accessed
@@ -73,7 +74,7 @@ class Date{
     }
 
     //Function which returns the number of days between two dates
-    func numberOfDays(firstDay day1 : Int,firstMonth month1 : Int,firstYear year1 : Int,secondDay day2 : Int,secondMonth month2 : Int,secondYear year2 : Int)-> Int {
+   public func numberOfDays(firstDay day1 : Int,firstMonth month1 : Int,firstYear year1 : Int,secondDay day2 : Int,secondMonth month2 : Int,secondYear year2 : Int)-> Int {
     //The array to know how many days in each month
         let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     //Variables to keep count of the sum of days
@@ -149,20 +150,23 @@ class Date{
     return totalNumberOfDays;
     }
     
-    func getDay()-> Int {
-        return day!;
+   public func getDay()-> Int {
+        return day!
     }
     
-    func getMonth()-> Int {
-    return month!;
+   public func getMonth()-> Int {
+    return month!
     }
     
-    func getYear() -> Int {
-    return year!;
+    public func getMonthInLetters() -> String?{
+        return monthInLetter!    }
+    
+   public func getYear() -> Int {
+    return year!
     }
     
     //Function which returns the new date in three integers after a number of days was added to the date
-    func addNumberOfDaysToADate (theDay d : Int,theMonth m : Int,theYear y : Int, daysToBeAdded Adder : Int) -> (Int, Int, Int) {
+   public func addNumberOfDaysToADate (theDay d : Int,theMonth m : Int,theYear y : Int, daysToBeAdded Adder : Int) -> (Int, Int, Int) {
     
         var tempDay: Int = d, tempMonth : Int = m, tempYear : Int = y, substractor : Int, adder : Int = Adder;
     
