@@ -122,7 +122,7 @@ public class Date{
             }
             //year 2 is bitter than year 1
             if (calcuYear2 > calcuYear1) {
-                print ("Calculating difference between years")
+                
                 repeat{
                     //Leap year
                     if (calcuYear1 % leapYear == 0){
@@ -139,17 +139,11 @@ public class Date{
                         calcuMonth1 += 1
                         calcuDay1 = 0
                     }
-                    print ("Month is \(calcuMonth1)")
-                    print ("Total days is \(totalNumberOfDays)")
+                    
                     //Reached the end of the month of the year, increments the year
-                    if (calcuMonth1 == 12){
+                    if (calcuMonth1 == 13){
                         calcuYear1 += 1
                         calcuMonth1 = 1
-                        print ("The new month is \(calcuMonth1)")
-                        print ("The second month is \(calcuMonth2)")
-                        print ("The first year is now \(calcuYear1)")
-                        print ("The second year is now \(calcuYear2)")
-                        
                     }
                 }
                     while (calcuYear1 < calcuYear2)
@@ -157,7 +151,7 @@ public class Date{
             
             //Same year but month2 is bigger than month1
             if ((calcuYear2 == calcuYear1) && (calcuMonth2 > calcuMonth1)){
-                print ("Now checking for the same year but difference in months")
+                
                 repeat{
                     //if the year is a leap year
                     if ( calcuYear1 % leapYear == 0){
@@ -171,12 +165,6 @@ public class Date{
                         calcuDay1 = 0
                         calcuMonth1 += 1
                     }
-                    print ("Month is \(calcuMonth1)")
-                    print ("Total days is \(totalNumberOfDays)")
-                    print ("The new month is \(calcuMonth1)")
-                    print ("The second month is \(calcuMonth2)")
-                    print ("The first day is \(calcuDay1)")
-                    print ("The second day is \(calcuDay2)")
                 }
                     while (calcuMonth1 < calcuMonth2)
                 //adds the remaining amount of days in the second month
@@ -219,7 +207,6 @@ public class Date{
             
             //Same year, same month, but day1 is bigger than day2
             if (calcuYear1 == calcuYear2 && calcuMonth1 == calcuMonth2 && calcuDay2 > calcuDay1){
-                print ("Now in function to check difference between days only")
                 
                 totalNumberOfDays += calcuDay2 - calcuDay1
                 
@@ -249,52 +236,77 @@ public class Date{
     //Function which returns the new date in three integers after a number of days was added to the date
     public func addNumberOfDaysToADate (theDay d : Int,theMonth m : Int,theYear y : Int, daysToBeAdded Adder : Int) -> (Int, Int, Int) {
         
-        var tempDay: Int = d, tempMonth : Int = m, tempYear : Int = y, substractor : Int, adder : Int = Adder;
+        var tempDay: Int = d, tempMonth : Int = m, tempYear : Int = y, tempSubstractor : Int, daysBeingAdded : Int = Adder;
         
+        repeat{
+            
+            //more than a month
+            if daysBeingAdded >= 31 {
+                
+                //What to do during leap years
+                if (tempYear % leapYear == 0){
+                    //adds remaining days to go the first day of the first month
+                    tempSubstractor = daysInEachMonthLeapYear[tempMonth - 1] - tempDay + 1
+                    //Next day becomes the first of the next month
+                    tempDay = 1
+                    //number of days being is substracted
+                    daysBeingAdded -= tempSubstractor
+                    //Month changes
+                    tempMonth += 1
+                }
+                    //Non leap year
+                else{
+                    //adds remaining days to go the first day of the first month
+                    tempSubstractor = daysInEachMonthNonLeapYear[tempMonth - 1] - tempDay + 1
+                    //Next day becomes the first of the next month
+                    tempDay = 1
+                    //number of days being is substracted
+                    daysBeingAdded -= tempSubstractor
+                    //Month changes
+                    tempMonth += 1
+                }
+                
+            }
+                
+            else {
+                //Leap Year
+                if (tempYear % leapYear == 0){
+                    //adds the remaining days
+                    tempDay += daysBeingAdded
+                    //checks if the date overflows onto the next month
+                    if (tempDay > daysInEachMonthLeapYear[tempMonth - 1]){
+                        //Gets the right date into the next month
+                        tempDay -= daysInEachMonthLeapYear[tempMonth - 1]
+                        //gets the next month
+                        tempMonth += 1
+                    }
+                }
+                    //Non Leap Year
+                else
+                {
+                    //adds the remaining days
+                    tempDay += daysBeingAdded
+                    //checks if the date overflows onto the next month
+                    if (tempDay > daysInEachMonthNonLeapYear[tempMonth - 1]){
+                        //Gets the right date into the next month
+                        tempDay -= daysInEachMonthNonLeapYear[tempMonth - 1]
+                        //gets the next month
+                        tempMonth += 1
+                    }
+                }
+                //All the days were added
+                daysBeingAdded = 0
+            }
+            
+            //Checks if december is reached => next year
+            if (tempMonth == 13){
+                tempYear += 1
+                tempMonth = 1
+            }
+            
+            //Continues until there are still days to be added
+        } while daysBeingAdded != 0
         
-        while (adder > 30) {
-            if (tempMonth == 4 || tempMonth == 6 || tempMonth == 9 || tempMonth == 11) {
-                substractor = 31 - tempDay;
-                tempDay = 1;
-                tempMonth += 1;
-                adder -= substractor;
-                
-            } else if (tempMonth == 1 || tempMonth == 3 || tempMonth == 5 || tempMonth == 7 || tempMonth == 8 ||
-                tempMonth == 10 || tempMonth == 12) {
-                substractor = 32 - tempDay;
-                tempDay = 1;
-                tempMonth += 1;
-                adder -= substractor;
-                
-                
-            } else if (tempMonth == 2) {
-                substractor = 29 - tempDay;
-                tempDay = 1;
-                tempMonth += 1;
-                adder -= substractor;
-            }
-            
-        }
-        if ((adder <= 30) && (adder > 0)) {
-            
-            tempDay += adder;
-            
-            if ((tempMonth == 4 || tempMonth == 6 || tempMonth == 9 || tempMonth == 11) && tempDay >= 31) {
-                tempMonth += 1;
-                tempDay -= 30;
-            }
-                
-            else if ((tempMonth == 1 || tempMonth == 3 || tempMonth == 5 || tempMonth == 7 || tempMonth == 8 ||
-                tempMonth == 10 || tempMonth == 12) && tempDay >= 32) {
-                tempMonth += 1;
-                tempDay -= 31;
-            }
-                
-            else if (tempMonth == 2 && tempDay >= 29) {
-                tempMonth += 1;
-                tempDay -= 28
-            }
-        }
         return (tempDay, tempMonth, tempYear);
     }
     //    function which prints the date
