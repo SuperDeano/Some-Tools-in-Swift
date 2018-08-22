@@ -75,79 +75,152 @@ public class Date{
 
     //Function which returns the number of days between two dates
    public func numberOfDays(firstDay day1 : Int,firstMonth month1 : Int,firstYear year1 : Int,secondDay day2 : Int,secondMonth month2 : Int,secondYear year2 : Int)-> Int {
+    
     //The array to know how many days in each month
-        let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let daysInEachMonthNonLeapYear = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let daysInEachMonthLeapYear = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    
     //Variables to keep count of the sum of days
-        var keepingCountDay1 : Int = 0, keepingCountDay2 : Int = 0, sortedDay1 : Int, sortedDay2 : Int, sortedMonth1 : Int, sortedMonth2 : Int, sortedYear1 : Int, sortedYear2 : Int = 0, totalNumberOfDays: Int = 0
+    var calcuDay1 = day1, calcuDay2 = day2, calcuMonth1 = month1, calcuMonth2 = month2, calcuYear1 = year1, calcuYear2 = year2, totalNumberOfDays: Int = 0
     
-    //sorts the two dates entered by the user in the correct order
-    if (year1 > year2) {
-    sortedYear1 = year1;
-    sortedYear2 = year2;
-    sortedMonth1 = month1;
-    sortedMonth2 = month2;
-    sortedDay1 = day1;
-    sortedDay2 = day2;
-    } else {
-    sortedYear1 = year2;
-    sortedYear2 = year1;
-    sortedMonth2 = month1;
-    sortedMonth1 = month2;
-    sortedDay1 = day2;
-    sortedDay2 = day1;
+    repeat {
+        //Year2 is smaller than year1, starts with the second date
+        if (calcuYear1 > calcuYear2) {
+            
+            repeat
+            {
+                //Leap year
+                if (calcuYear2 % leapYear == 0){
+                    
+                    //adds the remaining
+                    totalNumberOfDays += daysInEachMonthLeapYear[calcuMonth2] - calcuDay2
+                    calcuDay2 = 0
+                    calcuMonth2 += 1
+                    //Reached the end of the final month of the year
+                    if (calcuMonth2 == 12){
+                        calcuYear2 += 1
+                        calcuMonth2 = 1
+                    }
+                }
+                    //Non Leap Year
+                else{
+                    //adds remaining days
+                    totalNumberOfDays += daysInEachMonthNonLeapYear[calcuMonth2] - calcuDay2
+                    calcuMonth2 += 1
+                    calcuDay2 = 0
+                    if (calcuMonth2 == 12){
+                        calcuYear2 += 1
+                        calcuMonth2 = 1
+                    }
+                }
+                
+            }
+                while (calcuYear2 < calcuYear1)
+        }
+            //year 2 is bitter than year 1
+        else if (calcuYear2 > calcuYear1) {
+            
+            repeat{
+                //Leap year
+                if (calcuYear1 % leapYear == 0){
+                    
+                    //adds the remaining
+                    totalNumberOfDays += daysInEachMonthLeapYear[calcuMonth1 - 1] - calcuDay1
+                    calcuDay1 = 0
+                    calcuMonth1 += 1
+                    //Reached the end of the final month of the year
+                    if (calcuMonth1 == 12){
+                        calcuYear1 += 1
+                        calcuMonth1 = 1
+                    }
+                }
+                    //Non Leap Year
+                else{
+                    //adds remaining days
+                    totalNumberOfDays += daysInEachMonthNonLeapYear[calcuMonth1 - 1] - calcuDay1
+                    calcuMonth1 += 1
+                    calcuDay1 = 0
+                    //Reached the end of the month of the year, increments the year
+                    if (calcuMonth1 == 12){
+                        calcuYear1 += 1
+                        calcuMonth1 = 1
+                    }
+                }
+                
+            }
+                while (calcuYear1 < calcuYear2)
+        }
+            
+            //Same year but month2 is bigger than month1
+        else if (calcuYear2 == calcuYear1 && calcuMonth2 > calcuMonth1){
+            
+            repeat{
+                //if the year is a leap year
+                if ( calcuYear1 % leapYear == 0){
+                    totalNumberOfDays += daysInEachMonthLeapYear[calcuMonth1 - 1] - calcuDay1
+                    calcuDay1 = 0
+                    calcuMonth1 += 1
+                }
+                    //non leap year
+                else{
+                    totalNumberOfDays += daysInEachMonthNonLeapYear[calcuMonth1 - 1] - calcuDay1
+                    calcuDay1 = 0
+                    calcuMonth1 += 1
+                }
+            }
+                while (calcuMonth1 < calcuMonth2)
+            //adds the remaining amount of days in the second month
+            totalNumberOfDays += calcuDay2
+        }
+            
+            //Same year but month2 is smaller than month1
+        else if (calcuYear2 == calcuYear1 && calcuMonth2 < calcuMonth1){
+            
+            repeat{
+                //if the year is a leap year
+                if ( calcuYear2 % leapYear == 0){
+                    totalNumberOfDays += daysInEachMonthLeapYear[calcuMonth2 - 1] - calcuDay2
+                    calcuDay2 = 0
+                    calcuMonth2 += 1
+                }
+                    //non leap year
+                else{
+                    totalNumberOfDays += daysInEachMonthNonLeapYear[calcuMonth2 - 1] - calcuDay2
+                    calcuDay2 = 0
+                    calcuMonth2 += 1
+                }
+            }
+                while (calcuMonth2 < calcuMonth1)
+            //adds the remaining amount of days in the second month
+            totalNumberOfDays += calcuDay1
+        }
+            
+            //Same year, same month, but day1 is bigger than day2
+        else if (calcuYear1 == calcuYear2 && calcuMonth1 == calcuMonth2 && calcuDay1 > calcuDay2){
+            
+            totalNumberOfDays += calcuDay1 - calcuDay2 + 1
+            
+            //set both of them to 0
+            calcuDay1 = 0
+            calcuDay2 = 0
+        }
+            
+            //Same year, same month, but day1 is bigger than day2
+        else if (calcuYear1 == calcuYear2 && calcuMonth1 == calcuMonth2 && calcuDay2 > calcuDay1){
+            
+            totalNumberOfDays += calcuDay2 - calcuDay1
+            
+            //set both of them to 0
+            calcuDay1 = 0
+            calcuDay2 = 0
+        }
+        //loops until the right number of days has been added
     }
+        while (calcuYear2 != calcuYear1 && calcuMonth2 != calcuMonth1 && calcuDay1 != calcuDay2)
     
-    //if the years are not the same then we take the sum of days between each full years
-    if (sortedYear1 != sortedYear2) {
-    
-    totalNumberOfDays = (sortedYear1 - sortedYear2 - 1) * 365;
-    
-    
-    //Calculate how many days until the end of the first year starting from the next month
-        for index in sortedMonth2...daysInEachMonth.count {
-    keepingCountDay1 += daysInEachMonth[index];
-    }
-    //Then add the number of days to go in the month
-    keepingCountDay1 += daysInEachMonth[sortedMonth1 - 1] - sortedDay2;
-    
-    //Calculate the number of days since the beginning of the second year until the month before
-    for  y in 0...(sortedMonth1 - 1) {
-    keepingCountDay2 += daysInEachMonth[y];
-    }
-    //Then add the number of days passed in the month
-    keepingCountDay2 += sortedDay1;
-    //The total days is the addition of everything
-    totalNumberOfDays += (keepingCountDay1 + keepingCountDay2 + 1);
-    }
-    
-    //Does the counting if the two years are the same
-    else {
-    //if it's the same year, then the program does the right addition/substraction depending on the dates
-    if (month1 > month2) {
-    for z in (month2 - 1)...(month1 - 1) {
-    keepingCountDay1 += daysInEachMonth[z];
-    }
-    keepingCountDay1 += ((daysInEachMonth[month2 - 1] - day2) + day1);
-    
-    }
-    else if (month2 > month1) {
-    for w in (month1 - 1)...(month2 - 1) {
-    keepingCountDay1 += daysInEachMonth[w];
-    }
-    keepingCountDay1 += ((daysInEachMonth[month1 - 1] - day1) + day2);
-    }
-    //Does the counting if the two years and months are the same
-    else {
-    if (day1 > day2) {
-    keepingCountDay1 = day1 - day2;
-    } else {
-    keepingCountDay1 = day2 - day1;
-    }
-    }
-    totalNumberOfDays = keepingCountDay1 + keepingCountDay2;
-    }
     //Caculate how many days have passed in the other year
     return totalNumberOfDays;
+
     }
     
    public func getDay()-> Int {
