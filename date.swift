@@ -9,14 +9,12 @@ import Foundation
 
 public class Date{
     
-    //The variables
-    var day, month, year : Int?
-    var monthInLetter : String?
     let leapYear = 4
-    
     //The array to know how many days in each month
     let daysInEachMonthNonLeapYear = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     let daysInEachMonthLeapYear = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    
+    var day, month, year : Int?, monthInLetter : String?
     
     //Constructor with all three variables
     public init(day: Int, month: Int, year: Int){
@@ -28,7 +26,7 @@ public class Date{
         changeMonthIntoLetters()
     }
     
-    //Constructor with not variables
+    //Constructor with no variables
     public init() {
         day = 1
         month = 1
@@ -221,17 +219,8 @@ public class Date{
         return totalNumberOfDays;
     }
     
-    public   func getDay()-> Int {
-        return day!;
-    }
     
-    public   func getMonth()-> Int {
-        return month!;
-    }
     
-    public   func getYear() -> Int {
-        return year!;
-    }
     
     //Function which returns the new date in three integers after a number of days was added to the date
     public func addNumberOfDaysToADate (theDay d : Int,theMonth m : Int,theYear y : Int, daysToBeAdded Adder : Int) -> (Int, Int, Int) {
@@ -265,7 +254,6 @@ public class Date{
                     //Month changes
                     tempMonth += 1
                 }
-                
             }
                 
             else {
@@ -307,11 +295,119 @@ public class Date{
             //Continues until there are still days to be added
         } while daysBeingAdded != 0
         
-        return (tempDay, tempMonth, tempYear);
+        return (tempDay, tempMonth, tempYear)
     }
+    
+    
     //    function which prints the date
     public func printDATE(){
         print ("The Date is \(day!) \(monthInLetter!) \(year!)")
     }
+    
+    //Function which checks if a dates falls into a leap year
+    public func checkForLeap (day theDay : Int, month theMonth : Int, year theYear : Int) -> Bool {
+        let leapYear = 4
+        return (theYear % leapYear) == 0
+    }
+    
+    //Function which will return a previous date
+    public func subDaysFromDate (day d: Int, month m : Int, year y : Int, numOfDays daysBeingSub : Int) -> (Int, Int, Int){
+        
+        var tempDay: Int = d, tempMonth : Int = m, tempYear : Int = y, tempSubstractor : Int, daysToSub : Int = daysBeingSub;
+        
+        repeat{
+            
+            if (daysToSub >= 28){
+                
+                //Leap Year
+                if (tempYear % leapYear == 0){
+                    
+                    tempSubstractor = tempDay
+                    
+                    //To prevent problem when accessing the array
+                    if ((tempMonth - 2) < 0){
+                        tempMonth = 13
+                    }
+                    
+                    //The day then starts to the end of the previous month
+                    tempDay = daysInEachMonthLeapYear[tempMonth - 2]
+                    daysToSub -= tempSubstractor
+                    //The month moves back a month
+                    tempMonth -= 1
+                    
+                }
+                    //Non Leap Year
+                else{
+                    
+                    tempSubstractor = tempDay
+                    
+                    //To prevent problem when accessing the array
+                    if ((tempMonth - 2) < 0){
+                        tempMonth = 13
+                    }
+                    
+                    //The day then starts to the end of the previous month
+                    tempDay = daysInEachMonthNonLeapYear[tempMonth - 2]
+                    daysToSub -= tempSubstractor
+                    //The month moves back a month
+                    tempMonth -= 1
+                    
+                }
+                
+                
+            }
+                
+            else{
+                
+                //Leap Year
+                if (tempYear % leapYear == 0){
+                    if (tempDay - daysToSub <= 0){
+                        //To prevent problem when accessing the array
+                        if ((tempMonth - 2) < 0){
+                            tempMonth = 13
+                        }
+                        
+                        tempDay = daysInEachMonthLeapYear[tempMonth - 2] - tempDay - daysToSub
+                        tempMonth -= 1
+                        
+                    } else {
+                        tempDay -= daysToSub
+                    }
+                    
+                }
+                    //Non Leap Year
+                else {
+                    if (tempDay - daysToSub <= 0){
+                        
+                        //To prevent problem when accessing the array
+                        if ((tempMonth - 2) < 0){
+                            tempMonth = 13
+                        }
+                        
+                        tempDay = daysInEachMonthLeapYear[tempMonth - 2] - tempDay - daysToSub
+                        tempMonth -= 1
+                        
+                    } else {
+                        tempDay -= daysToSub
+                    }
+                }
+                
+            }
+            
+            //Reach the previous year
+            if  (tempMonth == 0){
+                //Gets to the last month of the previous year
+                tempMonth = 12
+                //Year moves back a year
+                tempYear -= 1
+            }
+            
+        }while daysToSub != 0
+        
+        
+        return (tempDay, tempMonth, tempYear)
+    }
+    
+    
 }
 
