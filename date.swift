@@ -319,76 +319,72 @@ public class Date{
             
             if (daysToSub >= 28){
                 
+                //To prevent problem when accessing the array
+                if (tempMonth - 2 < 0){
+                    tempMonth = 13
+                    tempYear -= 1
+                }
+                
                 //Leap Year
                 if (tempYear % leapYear == 0){
                     
                     tempSubstractor = tempDay
-                    
-                    //To prevent problem when accessing the array
-                    if ((tempMonth - 2) < 0){
-                        tempMonth = 13
-                    }
                     
                     //The day then starts to the end of the previous month
                     tempDay = daysInEachMonthLeapYear[tempMonth - 2]
                     daysToSub -= tempSubstractor
                     //The month moves back a month
                     tempMonth -= 1
-                    
                 }
                     //Non Leap Year
                 else{
                     
                     tempSubstractor = tempDay
                     
-                    //To prevent problem when accessing the array
-                    if ((tempMonth - 2) < 0){
-                        tempMonth = 13
-                    }
-                    
                     //The day then starts to the end of the previous month
                     tempDay = daysInEachMonthNonLeapYear[tempMonth - 2]
                     daysToSub -= tempSubstractor
                     //The month moves back a month
                     tempMonth -= 1
-                    
                 }
-                
-                
             }
                 
             else{
                 
+                //To prevent problem when accessing the array
+                if (tempMonth - 2 < 0){
+                    tempMonth = 13
+                    tempYear -= 1
+                }
+                
                 //Leap Year
                 if (tempYear % leapYear == 0){
+                    
                     if (tempDay - daysToSub <= 0){
-                        //To prevent problem when accessing the array
-                        if ((tempMonth - 2) < 0){
-                            tempMonth = 13
-                        }
                         
                         tempDay = daysInEachMonthLeapYear[tempMonth - 2] - tempDay - daysToSub
                         tempMonth -= 1
+                        daysToSub = 0
                         
                     } else {
                         tempDay -= daysToSub
+                        daysToSub = 0
                     }
                     
                 }
                     //Non Leap Year
                 else {
+                    
                     if (tempDay - daysToSub <= 0){
-                        
-                        //To prevent problem when accessing the array
-                        if ((tempMonth - 2) < 0){
-                            tempMonth = 13
-                        }
                         
                         tempDay = daysInEachMonthLeapYear[tempMonth - 2] - tempDay - daysToSub
                         tempMonth -= 1
+                        daysToSub = 0
+                    }
                         
-                    } else {
+                    else {
                         tempDay -= daysToSub
+                        daysToSub = 0
                     }
                 }
                 
@@ -403,7 +399,6 @@ public class Date{
             }
             
         }while daysToSub != 0
-        
         
         return (tempDay, tempMonth, tempYear)
     }
