@@ -16,8 +16,14 @@ struct myStack<T> {
         items.append(item)
     }
     
+    //function which pops
     mutating func pop () -> T{
     return items.removeLast()
+    }
+    
+    //function which checks whether it is empty
+    mutating func isEmpty () -> Bool {
+        return items.isEmpty
     }
     
 }
