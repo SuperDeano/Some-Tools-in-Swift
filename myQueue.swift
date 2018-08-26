@@ -23,4 +23,8 @@ struct myQueue <T> {
         return items.isEmpty
     }
     
+    func count() -> Int {
+        return items.count
+    }
+    
 }
