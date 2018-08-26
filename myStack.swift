@@ -26,6 +26,10 @@ struct myStack<T> {
         return items.isEmpty
     }
     
+    func count() -> Int {
+        return items.count
+    }
+
 }
 extension myStack {
     var topItem : T? {
